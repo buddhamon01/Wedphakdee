@@ -72,19 +72,112 @@ $leaves = $stmt->get_result();
     <title>ระบบวันลา</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Tahoma, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            min-height: 100vh;
+        }
+
         .top-bar {
-            background: #28a745;
-            padding: 15px;
-            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #0051ffff;
+            padding: 15px 20px;
             color: white;
             font-size: 22px;
             font-weight: bold;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .page-wrapper {
-            width: 95%;
-            max-width: 1150px;
-            margin: 30px auto;
+        .container-wrapper {
+            display: flex;
+            width: 100%;
+            margin-top: 60px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #003d99, #0051ff);
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 60px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            border-left-color: #48cae4;
+            padding-left: 25px;
+        }
+
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.15);
+            border-left-color: #48cae4;
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 10px 0;
+        }
+
+        .sidebar-title {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 15px 20px 8px;
+            letter-spacing: 1px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px 20px;
         }
 
         .card {
@@ -121,34 +214,22 @@ $leaves = $stmt->get_result();
             background: #1f7d35;
         }
 
-        .btn-back {
-            display: inline-block;
-            padding: 10px 16px;
-            background: #4a67ff;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .btn-back:hover {
-            background: #3349c9;
-        }
-
         .message-box {
-            background: #e8fff0;
-            color: #0f7a36;
+            background: #d4edda;
+            color: #155724;
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 15px;
+            border: 1px solid #c3e6cb;
         }
 
         .error-box {
-            background: #ffeaea;
-            color: #b30000;
+            background: #f8d7da;
+            color: #721c24;
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 15px;
+            border: 1px solid #f5c6cb;
         }
 
         .table-box {
@@ -220,6 +301,14 @@ $leaves = $stmt->get_result();
         }
 
         @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+
             .grid-2 {
                 grid-template-columns: 1fr;
             }
@@ -233,134 +322,166 @@ $leaves = $stmt->get_result();
                 width: 100%;
             }
         }
+
+        @media (max-width: 600px) {
+            .container-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
     </style>
 </head>
 <body>
-
     <div class="top-bar">
-        ระบบวันลา
+        🏢 ระบบแจ้งซ่อมและบริหารงาน
     </div>
 
-    <div class="page-wrapper">
+    <div class="container-wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-title">📋 เมนูหลัก</li>
+                <li><a href="dashboard.php">🏠 หน้าแรก</a></li>
+                <li><a href="leave.php" class="active">📅 วันลา</a></li>
+                <li><a href="e_document.php">📄 หนังสือราชการ</a></li>
+                <li><a href="vehicle/index.php">🚗 ยานพาหนะ</a></li>
+                <li><a href="repair_form.php">🔧 แจ้งซ่อม</a></li>
 
-        <a href="dashboard.php" class="btn-back">← กลับเมนูหลัก</a>
+                <li class="menu-divider"></li>
+                <li class="sidebar-title">⚙️ ตั้งค่า</li>
+                <li><a href="logout.php">🚪 ออกจากระบบ</a></li>
+            </ul>
+        </aside>
 
-        <div class="card">
-            <h2>ฟอร์มยื่นวันลา</h2>
+        <!-- Main Content -->
+        <main class="main-content">
 
-            <?php if (!empty($message)) { ?>
-                <?php
-                    $is_success = ($message == "บันทึกข้อมูลวันลาเรียบร้อยแล้ว" || $message == "อัปเดตสถานะวันลาเรียบร้อยแล้ว");
-                ?>
-                <div class="<?php echo $is_success ? 'message-box' : 'error-box'; ?>">
-                    <?php echo htmlspecialchars($message); ?>
-                </div>
-            <?php } ?>
+            <div class="card">
+                <h2>📋 ฟอร์มยื่นวันลา</h2>
 
-            <form method="POST" action="">
-                <input type="hidden" name="save_leave" value="1">
+                <?php if (!empty($message)) { ?>
+                    <?php
+                        $is_success = ($message == "บันทึกข้อมูลวันลาเรียบร้อยแล้ว" || $message == "อัปเดตสถานะวันลาเรียบร้อยแล้ว");
+                    ?>
+                    <div class="<?php echo $is_success ? 'message-box' : 'error-box'; ?>">
+                        <?php echo htmlspecialchars($message); ?>
+                    </div>
+                <?php } ?>
 
-                <input type="text" name="fullname" value="<?php echo htmlspecialchars($_SESSION["fullname"]); ?>" placeholder="ชื่อผู้ลา" required>
+                <form method="POST" action="">
+                    <input type="hidden" name="save_leave" value="1">
 
-                <select name="leave_type" required>
-                    <option value="">-- เลือกประเภทการลา --</option>
-                    <option value="ลาป่วย">ลาป่วย</option>
-                    <option value="ลากิจ">ลากิจ</option>
-                    <option value="ลาพักร้อน">ลาพักร้อน</option>
-                    <option value="ลาคลอด">ลาคลอด</option>
-                    <option value="ลาอื่น ๆ">ลาอื่น ๆ</option>
-                </select>
+                    <input type="text" name="fullname" value="<?php echo htmlspecialchars($_SESSION["fullname"]); ?>" placeholder="ชื่อผู้ลา" required>
 
-                <div class="grid-2">
-                    <div>
-                        <label>วันที่เริ่มลา</label>
-                        <input type="date" name="start_date" required>
+                    <select name="leave_type" required>
+                        <option value="">-- เลือกประเภทการลา --</option>
+                        <option value="ลาป่วย">ลาป่วย</option>
+                        <option value="ลากิจ">ลากิจ</option>
+                        <option value="ลาพักร้อน">ลาพักร้อน</option>
+                        <option value="ลาคลอด">ลาคลอด</option>
+                        <option value="ลาอื่น ๆ">ลาอื่น ๆ</option>
+                    </select>
+
+                    <div class="grid-2">
+                        <div>
+                            <label>วันที่เริ่มลา</label>
+                            <input type="date" name="start_date" required>
+                        </div>
+
+                        <div>
+                            <label>วันที่สิ้นสุดลา</label>
+                            <input type="date" name="end_date" required>
+                        </div>
                     </div>
 
-                    <div>
-                        <label>วันที่สิ้นสุดลา</label>
-                        <input type="date" name="end_date" required>
-                    </div>
-                </div>
+                    <textarea name="reason" placeholder="เหตุผลการลา" required></textarea>
 
-                <textarea name="reason" placeholder="เหตุผลการลา" required></textarea>
+                    <button type="submit">✅ บันทึกวันลา</button>
+                </form>
+            </div>
 
-                <button type="submit">บันทึกวันลา</button>
-            </form>
-        </div>
+            <div class="card">
+                <h2>📋 รายการวันลาของฉัน</h2>
 
-        <div class="card">
-            <h2>รายการวันลาของฉัน</h2>
+                <div class="table-box">
+                    <table>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>ชื่อ</th>
+                            <th>ประเภทการลา</th>
+                            <th>วันที่เริ่ม</th>
+                            <th>วันที่สิ้นสุด</th>
+                            <th>เหตุผล</th>
+                            <th>สถานะ</th>
+                            <th>แก้ไขสถานะ</th>
+                            <th>วันที่บันทึก</th>
+                        </tr>
 
-            <div class="table-box">
-                <table>
-                    <tr>
-                        <th>ลำดับ</th>
-                        <th>ชื่อ</th>
-                        <th>ประเภทการลา</th>
-                        <th>วันที่เริ่ม</th>
-                        <th>วันที่สิ้นสุด</th>
-                        <th>เหตุผล</th>
-                        <th>สถานะปัจจุบัน</th>
-                        <th>แก้ไขสถานะ</th>
-                        <th>วันที่บันทึก</th>
-                    </tr>
+                        <?php if ($leaves && $leaves->num_rows > 0) { ?>
+                            <?php while($row = $leaves->fetch_assoc()) { ?>
+                                <tr>
+                                    <td><?php echo $row["id"]; ?></td>
+                                    <td><?php echo htmlspecialchars($row["fullname"]); ?></td>
+                                    <td><?php echo htmlspecialchars($row["leave_type"]); ?></td>
+                                    <td><?php echo htmlspecialchars($row["start_date"]); ?></td>
+                                    <td><?php echo htmlspecialchars($row["end_date"]); ?></td>
+                                    <td><?php echo nl2br(htmlspecialchars($row["reason"])); ?></td>
+                                    <td>
+                                        <?php
+                                            $status_class = "pending";
+                                            if ($row["status"] == "อนุมัติ") {
+                                                $status_class = "approved";
+                                            } elseif ($row["status"] == "ยกเลิก") {
+                                                $status_class = "cancel";
+                                            }
+                                        ?>
+                                        <span class="badge <?php echo $status_class; ?>">
+                                            <?php echo htmlspecialchars($row["status"]); ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="" class="status-form">
+                                            <input type="hidden" name="update_status" value="1">
+                                            <input type="hidden" name="leave_id" value="<?php echo $row["id"]; ?>">
 
-                    <?php if ($leaves && $leaves->num_rows > 0) { ?>
-                        <?php while($row = $leaves->fetch_assoc()) { ?>
+                                            <select name="status" required>
+                                                <option value="รอดำเนินการ" <?php if ($row["status"] == "รอดำเนินการ") echo "selected"; ?>>
+                                                    รอดำเนินการ
+                                                </option>
+                                                <option value="อนุมัติ" <?php if ($row["status"] == "อนุมัติ") echo "selected"; ?>>
+                                                    อนุมัติ
+                                                </option>
+                                                <option value="ยกเลิก" <?php if ($row["status"] == "ยกเลิก") echo "selected"; ?>>
+                                                    ยกเลิก
+                                                </option>
+                                            </select>
+
+                                            <button type="submit">บันทึก</button>
+                                        </form>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($row["created_at"]); ?></td>
+                                </tr>
+                            <?php } ?>
+                        <?php } else { ?>
                             <tr>
-                                <td><?php echo $row["id"]; ?></td>
-                                <td><?php echo htmlspecialchars($row["fullname"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["leave_type"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["start_date"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["end_date"]); ?></td>
-                                <td><?php echo nl2br(htmlspecialchars($row["reason"])); ?></td>
-                                <td>
-                                    <?php
-                                        $status_class = "pending";
-                                        if ($row["status"] == "อนุมัติ") {
-                                            $status_class = "approved";
-                                        } elseif ($row["status"] == "ยกเลิก") {
-                                            $status_class = "cancel";
-                                        }
-                                    ?>
-                                    <span class="badge <?php echo $status_class; ?>">
-                                        <?php echo htmlspecialchars($row["status"]); ?>
-                                    </span>
-                                </td>
-                                <td>
-                                    <form method="POST" action="" class="status-form">
-                                        <input type="hidden" name="update_status" value="1">
-                                        <input type="hidden" name="leave_id" value="<?php echo $row["id"]; ?>">
-
-                                        <select name="status" required>
-                                            <option value="รอดำเนินการ" <?php if ($row["status"] == "รอดำเนินการ") echo "selected"; ?>>
-                                                รอดำเนินการ
-                                            </option>
-                                            <option value="อนุมัติ" <?php if ($row["status"] == "อนุมัติ") echo "selected"; ?>>
-                                                อนุมัติ
-                                            </option>
-                                            <option value="ยกเลิก" <?php if ($row["status"] == "ยกเลิก") echo "selected"; ?>>
-                                                ยกเลิก
-                                            </option>
-                                        </select>
-
-                                        <button type="submit">บันทึก</button>
-                                    </form>
-                                </td>
-                                <td><?php echo htmlspecialchars($row["created_at"]); ?></td>
+                                <td colspan="9" style="text-align:center;">ยังไม่มีข้อมูลวันลา</td>
                             </tr>
                         <?php } ?>
-                    <?php } else { ?>
-                        <tr>
-                            <td colspan="9" style="text-align:center;">ยังไม่มีข้อมูลวันลา</td>
-                        </tr>
-                    <?php } ?>
-                </table>
+                    </table>
+                </div>
             </div>
-        </div>
 
+        </main>
     </div>
-
 </body>
+
 </html>

@@ -7,6 +7,12 @@ if (!isset($_SESSION["user_id"])) {
     exit();
 }
 
+// Check if just logged in
+$show_login_success = isset($_SESSION["login_success"]) ? $_SESSION["login_success"] : false;
+if ($show_login_success) {
+    unset($_SESSION["login_success"]);
+}
+
 // ฟั่งชี่นแจ้งเตือนไลน์ 
 
 
@@ -102,22 +108,116 @@ $repairs = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <title>เมนูหลัก - ระบบแจ้งซ่อม</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        .menu-bar {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Tahoma, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             background: #0051ffff;
-            padding: 15px;
-            text-align: center;
+            padding: 15px 20px;
             color: white;
             font-size: 22px;
             font-weight: bold;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .dashboard-wrapper {
-            width: 95%;
-            max-width: 1150px;
-            margin: 30px auto;
-        }   
+        .container {
+            display: flex;
+            width: 100%;
+            margin-top: 60px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #003d99, #0051ff);
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 60px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            border-left-color: #48cae4;
+            padding-left: 25px;
+        }
+
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.15);
+            border-left-color: #48cae4;
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 10px 0;
+        }
+
+        .sidebar-title {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 15px 20px 8px;
+            letter-spacing: 1px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px 20px;
+        }
 
         .card {
             background: #fff;
@@ -125,6 +225,11 @@ $repairs = $stmt->get_result();
             border-radius: 12px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            color: #333;
         }
 
         textarea {
@@ -157,33 +262,6 @@ $repairs = $stmt->get_result();
 
         button:hover {
             background: #3349c9;
-        }
-
-        .logout-btn,
-        .menu-btn {
-            display: inline-block;
-            padding: 10px 18px;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-top: 10px;
-            margin-right: 10px;
-        }
-
-        .logout-btn {
-            background: #dc3545;
-        }
-
-        .logout-btn:hover {
-            background: #b52a37;
-        }
-
-        .menu-btn {
-            background: #28a745;
-        }
-
-        .menu-btn:hover {
-            background: #1f7d35;
         }
 
         .msg-box {
@@ -258,36 +336,122 @@ $repairs = $stmt->get_result();
 
         .welcome-text {
             margin-bottom: 10px;
+            color: #666;
+        }
+
+        .user-info {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .user-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .user-info strong {
+            color: #0051ff;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+
+            .top-bar {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+                margin-top: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .top-bar {
+                font-size: 16px;
+                padding: 12px 15px;
+            }
         }
     </style>
 </head>
 <body>
-  
-    <div class="menu-bar">
-        เมนูหลัก - ระบบแจ้งซ่อม
+    <div class="top-bar">
+        🏢 ระบบแจ้งซ่อมและบริหารงาน
     </div>
 
-    <div class="dashboard-wrapper">
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-title">📋 เมนูหลัก</li>
+                <li><a href="dashboard.php">🏠 หน้าแรก</a></li>
+                <li><a href="leave.php">📅 วันลา</a></li>
+                <li><a href="e_document.php">📄 หนังสือราชการ</a></li>
+                <li><a href="vehicle/index.php">🚗 ยานพาหนะ</a></li>
+                <li><a href="repair_form.php">🔧 แจ้งซ่อม</a></li>
 
-        <div class="card">
-            <h2>ยินดีต้อนรับ</h2>
-            <p class="welcome-text"><strong>ชื่อ:</strong> <?php echo htmlspecialchars($_SESSION["fullname"]); ?></p>
-            <p><strong>Username:</strong> <?php echo htmlspecialchars($_SESSION["username"]); ?></p>
+                <li class="menu-divider"></li>
+                <li class="sidebar-title">⚙️ ตั้งค่า</li>
+                <li><a href="logout.php">🚪 ออกจากระบบ</a></li>
+            </ul>
+        </aside>
 
-            <a class="menu-btn" href="leave.php">📅 วันลา</a>
-            <a class="menu-btn" href="e_document.php">📄 หนังสือราชการ</a>
-            <a class="menu-btn" href="vehicle/index.php">🚗 งานบริการยานพาหนะ</a>
-            <a class="menu-btn" href="repair_form.php">หน้าแจ้งซ่อม</a>
-            <a class="logout-btn" href="logout.php">ออกจากระบบ</a>
-            
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="card">
+                <h2>👋 ยินดีต้อนรับ</h2>
+                <div class="user-info">
+                    <p><strong>ชื่อ:</strong> <?php echo htmlspecialchars($_SESSION["fullname"]); ?></p>
+                    <p><strong>Username:</strong> <?php echo htmlspecialchars($_SESSION["username"]); ?></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Login Success -->
+    <div class="modal fade" id="loginSuccessModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">✅ ยินดีต้อนรับ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>สวัสดี <strong><?php echo htmlspecialchars($_SESSION["fullname"]); ?></strong></p>
+                    <p>ยินดีต้อนรับเข้าสู่ระบบแจ้งซ่อมและบริหารงาน</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">เข้าใช้งาน</button>
+                </div>
+            </div>
         </div>
-        
+    </div>
 
-</select>
-
-              
-</select>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        <?php if ($show_login_success) { ?>
+            var loginModal = new bootstrap.Modal(document.getElementById('loginSuccessModal'));
+            loginModal.show();
+        <?php } ?>
+    </script>
 </body>
 </html>

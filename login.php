@@ -22,11 +22,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["user_id"] = $user["id"];
                 $_SESSION["fullname"] = $user["fullname"];
                 $_SESSION["username"] = $user["username"];
+                $_SESSION["login_success"] = true;
 
                 header("Location: dashboard.php");
                 exit();
             } else {
-                $message = "รหัสผ่านไม่ถูกต้อง";
+                $message = "❌ รหัสผ่านไม่ถูกต้อง";
             }
         } else {
             $message = "ไม่พบชื่อผู้ใช้นี้ในระบบ";
@@ -43,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>backoffice</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -167,5 +169,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      
         </div>
     </div>
+
+    <!-- Modal for Error Message -->
+    <div class="modal fade" id="errorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">⚠️ ข้อผิดพลาด</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <?php echo htmlspecialchars($message); ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        <?php if (!empty($message)) { ?>
+            var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+            errorModal.show();
+        <?php } ?>
+    </script>
 </body>
 </html>

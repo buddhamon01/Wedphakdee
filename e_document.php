@@ -416,26 +416,126 @@ $receivedDocuments = $stmtReceived->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Tahoma, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            min-height: 100vh;
+        }
+
         .top-bar {
-            background: #6f42c1;
-            padding: 15px;
-            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #0051ffff;
+            padding: 15px 20px;
             color: white;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+
+        .container-wrapper {
+            display: flex;
+            width: 100%;
+            margin-top: 60px;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, #003d99, #0051ff);
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            left: 0;
+            top: 60px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(255,255,255,0.1);
+            border-left-color: #48cae4;
+            padding-left: 25px;
+        }
+
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.15);
+            border-left-color: #48cae4;
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 10px 0;
+        }
+
+        .sidebar-title {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 15px 20px 8px;
+            letter-spacing: 1px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px 20px;
+        }
+
         .page-wrapper {
-            width: 95%;
-            max-width: 1200px;
-            margin: 30px auto;
+            width: 100%;
         }
+
         .card {
             background: #fff;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.10);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             margin-bottom: 25px;
         }
+
         .btn-back, .lang-btn, .download-btn, .ack-btn {
             display: inline-block;
             padding: 10px 16px;
@@ -444,9 +544,10 @@ $receivedDocuments = $stmtReceived->get_result();
             border-radius: 8px;
             border: none;
             cursor: pointer;
+            margin: 5px 5px 5px 0;
         }
         .btn-back { background: #4a67ff; }
-        .lang-btn { background: #6f42c1; margin-left: 5px; }
+        .lang-btn { background: #6f42c1; }
         .download-btn { background: #198754; }
         .ack-btn { background: #fd7e14; }
         input, select, textarea, button {
@@ -475,21 +576,23 @@ $receivedDocuments = $stmtReceived->get_result();
             gap: 15px;
         }
         .success {
-    background: #198754;
-}
+            background: #198754;
+        }
         .message-success {
-            background: #e8fff0;
-            color: #0f7a36;
+            background: #d4edda;
+            color: #155724;
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 15px;
+            border: 1px solid #c3e6cb;
         }
         .message-error {
-            background: #ffeaea;
-            color: #b30000;
+            background: #f8d7da;
+            color: #721c24;
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 15px;
+            border: 1px solid #f5c6cb;
         }
         .table-box { overflow-x: auto; }
         table {
@@ -536,6 +639,14 @@ $receivedDocuments = $stmtReceived->get_result();
         .cancel { background: #dc3545; }
 
         @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+
             .grid-2 { grid-template-columns: 1fr; }
             .status-form {
                 flex-direction: column;
@@ -543,30 +654,65 @@ $receivedDocuments = $stmtReceived->get_result();
             }
             .status-form button { width: 100%; }
         }
+
+        @media (max-width: 600px) {
+            .container-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="top-bar"><?php echo $t["title"]; ?></div>
+<div class="top-bar">🏢 ระบบแจ้งซ่อมและบริหารงาน</div>
 
-<div class="page-wrapper">
+<div class="container-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <ul class="sidebar-menu">
+            <li class="sidebar-title">📋 เมนูหลัก</li>
+            <li><a href="dashboard.php">🏠 หน้าแรก</a></li>
+            <li><a href="leave.php">📅 วันลา</a></li>
+            <li><a href="e_document.php" class="active">📄 หนังสือราชการ</a></li>
+            <li><a href="vehicle/index.php">🚗 ยานพาหนะ</a></li>
+            <li><a href="repair_form.php">🔧 แจ้งซ่อม</a></li>
 
-    <a href="dashboard.php" class="btn-back"><?php echo $t["back"]; ?></a>
-    <a href="e_document.php?lang=th" class="lang-btn">ไทย</a>
-    <a href="e_document.php?lang=en" class="lang-btn">English</a>
-    <a href="e_document.php?lang=cn" class="lang-btn">中文</a>
+            <li class="menu-divider"></li>
+            <li class="sidebar-title">⚙️ ตั้งค่า</li>
+            <li><a href="logout.php">🚪 ออกจากระบบ</a></li>
+        </ul>
+    </aside>
 
-    <div class="card">
-        <h2><?php echo $t["form_title"]; ?></h2>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-wrapper">
 
-        <?php if (!empty($message)) { ?>
-            <div class="<?php echo $message_type == 'success' ? 'message-success' : 'message-error'; ?>">
-                <?php echo htmlspecialchars($message); ?>
-            </div>
-        <?php } ?>
+            <a href="dashboard.php" class="btn-back"><?php echo $t["back"]; ?></a>
+            <a href="e_document.php?lang=th" class="lang-btn">ไทย</a>
+            <a href="e_document.php?lang=en" class="lang-btn">English</a>
+            <a href="e_document.php?lang=cn" class="lang-btn">中文</a>
 
-        <form method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="save_document" value="1">
+            <div class="card">
+                <h2><?php echo $t["form_title"]; ?></h2>
+
+                <?php if (!empty($message)) { ?>
+                    <div class="<?php echo $message_type == 'success' ? 'message-success' : 'message-error'; ?>">
+                        <?php echo htmlspecialchars($message); ?>
+                    </div>
+                <?php } ?>
+
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="save_document" value="1">
 
             <div class="grid-2">
                 <div>
@@ -755,9 +901,11 @@ if ($row["status"] == "ยกเลิก") $status_class = "cancel";
                 <?php } ?>
             </table>
         </div>
-    </div>
+            </div>
 
-</div>
+        </div>
+        </main>
+    </div>
 
 <script>
 function toggleReceiver() {
