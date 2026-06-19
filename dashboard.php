@@ -1,4 +1,3 @@
-
 <?php
 include("config.php");
 
@@ -27,13 +26,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_repair"])) {
     } else {
         $technician_id = $_POST["technician_id"];
 
-$stmt = $conn->prepare("
+        $stmt = $conn->prepare("
     INSERT INTO repairs 
     (user_id, topic, reporter_name, detail, technician_id) 
     VALUES (?, ?, ?, ?, ?)
 ");
 
-$stmt->bind_param("isssi", $user_id, $topic, $reporter_name, $detail, $technician_id);
+        $stmt->bind_param("isssi", $user_id, $topic, $reporter_name, $detail, $technician_id);
         $stmt->bind_param("isss", $user_id, $topic, $reporter_name, $detail);
 
         if ($stmt->execute()) {
@@ -105,6 +104,7 @@ $repairs = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <title>เมนูหลัก - ระบบแจ้งซ่อม</title>
@@ -135,7 +135,7 @@ $repairs = $stmt->get_result();
             font-size: 22px;
             font-weight: bold;
             z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .container {
@@ -148,7 +148,7 @@ $repairs = $stmt->get_result();
             width: 260px;
             background: linear-gradient(135deg, #003d99, #0051ff);
             padding: 20px 0;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             left: 0;
             top: 60px;
@@ -161,11 +161,11 @@ $repairs = $stmt->get_result();
         }
 
         .sidebar::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 3px;
         }
 
@@ -188,24 +188,24 @@ $repairs = $stmt->get_result();
         }
 
         .sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-left-color: #48cae4;
             padding-left: 25px;
         }
 
         .sidebar-menu a.active {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             border-left-color: #48cae4;
         }
 
         .menu-divider {
             height: 1px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             margin: 10px 0;
         }
 
         .sidebar-title {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
@@ -223,7 +223,7 @@ $repairs = $stmt->get_result();
             background: #fff;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 25px;
         }
 
@@ -244,7 +244,9 @@ $repairs = $stmt->get_result();
             font-family: Tahoma, sans-serif;
         }
 
-        input, button, select {
+        input,
+        button,
+        select {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
@@ -283,7 +285,8 @@ $repairs = $stmt->get_result();
             background: white;
         }
 
-        table th, table td {
+        table th,
+        table td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
@@ -327,7 +330,7 @@ $repairs = $stmt->get_result();
         }
 
         .done {
-           background: linear-gradient(135deg, #00b4d8, #48cae4);
+            background: linear-gradient(135deg, #00b4d8, #48cae4);
         }
 
         .cancel {
@@ -393,6 +396,7 @@ $repairs = $stmt->get_result();
         }
     </style>
 </head>
+
 <body>
     <div class="top-bar">
         🏢 ระบบแจ้งซ่อมและบริหารงาน
@@ -410,7 +414,9 @@ $repairs = $stmt->get_result();
                 <li><a href="repair_form.php">🔧 แจ้งซ่อม</a></li>
 
                 <li class="menu-divider"></li>
+
                 <li class="sidebar-title">⚙️ ตั้งค่า</li>
+                <li><a href="">โปรไฟล์</a></li>
                 <li><a href="logout.php">🚪 ออกจากระบบ</a></li>
             </ul>
         </aside>
@@ -454,4 +460,5 @@ $repairs = $stmt->get_result();
         <?php } ?>
     </script>
 </body>
+
 </html>
