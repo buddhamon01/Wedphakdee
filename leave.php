@@ -67,6 +67,7 @@ $leaves = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <title>ระบบวันลา</title>
@@ -96,7 +97,7 @@ $leaves = $stmt->get_result();
             font-size: 22px;
             font-weight: bold;
             z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .container-wrapper {
@@ -109,7 +110,7 @@ $leaves = $stmt->get_result();
             width: 260px;
             background: linear-gradient(135deg, #003d99, #0051ff);
             padding: 20px 0;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             left: 0;
             top: 60px;
@@ -122,11 +123,11 @@ $leaves = $stmt->get_result();
         }
 
         .sidebar::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 3px;
         }
 
@@ -149,24 +150,24 @@ $leaves = $stmt->get_result();
         }
 
         .sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-left-color: #48cae4;
             padding-left: 25px;
         }
 
         .sidebar-menu a.active {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             border-left-color: #48cae4;
         }
 
         .menu-divider {
             height: 1px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             margin: 10px 0;
         }
 
         .sidebar-title {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
@@ -184,11 +185,14 @@ $leaves = $stmt->get_result();
             background: #fff;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 25px;
         }
 
-        input, select, textarea, button {
+        input,
+        select,
+        textarea,
+        button {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
@@ -243,7 +247,8 @@ $leaves = $stmt->get_result();
             background: white;
         }
 
-        table th, table td {
+        table th,
+        table td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
@@ -340,6 +345,7 @@ $leaves = $stmt->get_result();
         }
     </style>
 </head>
+
 <body>
     <div class="top-bar">
         🏢 ระบบแจ้งซ่อมและบริหารงาน
@@ -358,7 +364,7 @@ $leaves = $stmt->get_result();
 
                 <li class="menu-divider"></li>
                 <li class="sidebar-title">⚙️ ตั้งค่า</li>
-                <li><a href="logout.php">🚪 ออกจากระบบ</a></li>
+                <li><a href="logout.php" class="logout-link">🚪 ออกจากระบบ</a></li>
             </ul>
         </aside>
 
@@ -370,7 +376,7 @@ $leaves = $stmt->get_result();
 
                 <?php if (!empty($message)) { ?>
                     <?php
-                        $is_success = ($message == "บันทึกข้อมูลวันลาเรียบร้อยแล้ว" || $message == "อัปเดตสถานะวันลาเรียบร้อยแล้ว");
+                    $is_success = ($message == "บันทึกข้อมูลวันลาเรียบร้อยแล้ว" || $message == "อัปเดตสถานะวันลาเรียบร้อยแล้ว");
                     ?>
                     <div class="<?php echo $is_success ? 'message-box' : 'error-box'; ?>">
                         <?php echo htmlspecialchars($message); ?>
@@ -427,7 +433,7 @@ $leaves = $stmt->get_result();
                         </tr>
 
                         <?php if ($leaves && $leaves->num_rows > 0) { ?>
-                            <?php while($row = $leaves->fetch_assoc()) { ?>
+                            <?php while ($row = $leaves->fetch_assoc()) { ?>
                                 <tr>
                                     <td><?php echo $row["id"]; ?></td>
                                     <td><?php echo htmlspecialchars($row["fullname"]); ?></td>
@@ -437,12 +443,12 @@ $leaves = $stmt->get_result();
                                     <td><?php echo nl2br(htmlspecialchars($row["reason"])); ?></td>
                                     <td>
                                         <?php
-                                            $status_class = "pending";
-                                            if ($row["status"] == "อนุมัติ") {
-                                                $status_class = "approved";
-                                            } elseif ($row["status"] == "ยกเลิก") {
-                                                $status_class = "cancel";
-                                            }
+                                        $status_class = "pending";
+                                        if ($row["status"] == "อนุมัติ") {
+                                            $status_class = "approved";
+                                        } elseif ($row["status"] == "ยกเลิก") {
+                                            $status_class = "cancel";
+                                        }
                                         ?>
                                         <span class="badge <?php echo $status_class; ?>">
                                             <?php echo htmlspecialchars($row["status"]); ?>
@@ -482,6 +488,138 @@ $leaves = $stmt->get_result();
 
         </main>
     </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        #logoutModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        #logoutModal.active {
+            display: flex;
+        }
+
+        #logoutModal .modal-box {
+            width: min(500px, calc(100% - 40px));
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        #logoutModal .modal-header {
+            padding: 18px 20px;
+            background: #198754;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #logoutModal .modal-title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        #logoutModal .modal-close {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        #logoutModal .modal-body {
+            padding: 20px;
+            color: #333;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        #logoutModal .modal-footer {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        #logoutModal .btn-cancel,
+        #logoutModal .btn-confirm {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 18px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        #logoutModal .btn-cancel {
+            background: #6c757d;
+            color: #fff;
+        }
+
+        #logoutModal .btn-confirm {
+            background: #dc3545;
+            color: #fff;
+        }
+    </style>
+
+    <div id="logoutModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title">ยืนยันออกจากระบบ</div>
+                <div><button class="modal-close" type="button" id="logoutModalClose">&times;</button></div>
+            </div>
+            <div class="modal-body">คุณต้องการออกจากระบบหรือไม่?</div>
+            <div class="modal-footer">
+                <button class="btn-cancel" type="button" id="logoutModalCancel">ยกเลิก</button>
+                <button class="btn-confirm" type="button" id="logoutModalConfirm">ออกจากระบบ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var logoutModal = document.getElementById('logoutModal');
+            var logoutHref = '';
+            var links = document.querySelectorAll('.logout-link');
+            var closeBtn = document.getElementById('logoutModalClose');
+            var cancelBtn = document.getElementById('logoutModalCancel');
+            var confirmBtn = document.getElementById('logoutModalConfirm');
+
+            links.forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    logoutHref = this.href;
+                    logoutModal.classList.add('active');
+                });
+            });
+
+            var hideModal = function() {
+                logoutModal.classList.remove('active');
+            };
+
+            closeBtn.addEventListener('click', hideModal);
+            cancelBtn.addEventListener('click', hideModal);
+            logoutModal.addEventListener('click', function(event) {
+                if (event.target === logoutModal) {
+                    hideModal();
+                }
+            });
+            confirmBtn.addEventListener('click', function() {
+                if (logoutHref) {
+                    window.location.href = logoutHref;
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

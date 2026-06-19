@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,40 +121,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-align: center;
             margin-top: 15px;
         }
-        .logo-box {
-    text-align: center;
-    margin-bottom: 15px;
-}
 
-.logo-box img {
-    width: 100px;      /* ปรับขนาดได้ */
-    height: auto;
-    border-radius: 12px;
-}.logo-box img {
-    transition: 0.3s;
-}
-.logo-box img:hover {
-    transform: scale(1.05);
-} 
-.brand {
-    font-size: 26px;
-    font-weight: bold;
-    background: linear-gradient(90deg, #0a7a3d, #6ee7a1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-        
+        .logo-box {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-box img {
+            width: 100px;
+            /* ปรับขนาดได้ */
+            height: auto;
+            border-radius: 12px;
+        }
+
+        .logo-box img {
+            transition: 0.3s;
+        }
+
+        .logo-box img:hover {
+            transform: scale(1.05);
+        }
+
+        .brand {
+            font-size: 26px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #0a7a3d, #6ee7a1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="box">
             <div class="logo-box">
-    <img src="images/1.png" alt="logo">
-</div>
- 
-             <h2>โรงพยาบาลภักดีชุมพล</h2>
-                    <p class="brand">ฺBackofficePhakdee</p>
+                <img src="images/1.png" alt="logo">
+            </div>
+
+            <h2>โรงพยาบาลภักดีชุมพล</h2>
+            <p class="brand">ฺBackofficePhakdee</p>
 
             <?php if (!empty($message)) { ?>
                 <div class="error"><?php echo htmlspecialchars($message); ?></div>
@@ -166,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
 
             <p>ยังไม่มีบัญชี? <a href="register.php">สมัครสมาชิก</a></p>
-     
+
         </div>
     </div>
 
@@ -196,4 +203,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php } ?>
     </script>
 </body>
+
 </html>

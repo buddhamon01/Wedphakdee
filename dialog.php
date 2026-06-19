@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <title>เทมเพลท</title>
@@ -47,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 22px;
             font-weight: bold;
             z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
@@ -61,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             width: 260px;
             background: linear-gradient(135deg, #003d99, #0051ff);
             padding: 20px 0;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             left: 0;
             top: 60px;
@@ -74,11 +75,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .sidebar::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 3px;
         }
 
@@ -101,24 +102,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-left-color: #48cae4;
             padding-left: 25px;
         }
 
         .sidebar-menu a.active {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             border-left-color: #48cae4;
         }
 
         .menu-divider {
             height: 1px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             margin: 10px 0;
         }
 
         .sidebar-title {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
@@ -136,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background: #fff;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 25px;
         }
 
@@ -192,6 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
+
 <body>
     <div class="top-bar">
         🏢 ระบบแจ้งซ่อมและบริหารงาน
@@ -211,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <li class="menu-divider"></li>
                 <li class="sidebar-title">⚙️ ตั้งค่า</li>
-                <li><a href="logout.php">🚪 ออกจากระบบ</a></li>
+                <li><a href="logout.php" class="logout-link">🚪 ออกจากระบบ</a></li>
             </ul>
         </aside>
 
@@ -219,7 +221,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <main class="main-content">
             <div class="card">
                 <h2>📋 หน้าเทมเพลท</h2>
-                
+
                 <?php if (!empty($message)): ?>
                     <div class="msg-box msg-<?php echo $message_type; ?>">
                         <?= htmlspecialchars($message); ?>
@@ -261,5 +263,123 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             messageModal.show();
         });
     </script>
+
+    <style>
+        #logoutModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        #logoutModal.active {
+            display: flex;
+        }
+
+        #logoutModal .logout-modal-dialog {
+            width: min(480px, calc(100% - 40px));
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        #logoutModal .logout-modal-header {
+            padding: 18px 20px;
+            background: #0d6efd;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #logoutModal .logout-modal-body {
+            padding: 20px;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        #logoutModal .logout-modal-footer {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        #logoutModal .logout-modal-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        #logoutModal .logout-modal-btn.cancel {
+            background: #6c757d;
+            color: #fff;
+        }
+
+        #logoutModal .logout-modal-btn.confirm {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        #logoutModal .logout-modal-close {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+        }
+    </style>
+
+    <div id="logoutModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title">ยืนยันออกจากระบบ</div>
+                <div><button class="modal-close" type="button" id="logoutModalClose">&times;</button></div>
+            </div>
+            <div class="modal-body">คุณต้องการออกจากระบบหรือไม่?</div>
+            <div class="modal-footer">
+                <button class="btn-cancel" type="button" id="logoutModalCancel">ยกเลิก</button>
+                <button class="btn-confirm" type="button" id="logoutModalConfirm">ออกจากระบบ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var logoutModal = document.getElementById("logoutModal");
+            var logoutHref = "";
+
+            document.querySelectorAll(".logout-link").forEach(function(link) {
+                link.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    logoutHref = this.href;
+                    logoutModal.classList.add("active");
+                });
+            });
+
+            var hideModal = function() {
+                logoutModal.classList.remove("active");
+            };
+
+            document.getElementById("logoutCancel").addEventListener("click", hideModal);
+            document.getElementById("logoutModalClose").addEventListener("click", hideModal);
+            document.getElementById("logoutConfirm").addEventListener("click", function() {
+                window.location.href = logoutHref;
+            });
+            logoutModal.addEventListener("click", function(event) {
+                if (event.target === logoutModal) {
+                    hideModal();
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>
