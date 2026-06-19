@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: dashboard.php");
                 exit();
             } else {
-                $message = "❌ รหัสผ่านไม่ถูกต้อง นะครับ";
+                $message = "❌ รหัสผ่านไม่ถูกต้อง";
             }
         } else {
             $message = "ไม่พบชื่อผู้ใช้นี้ในระบบ";
