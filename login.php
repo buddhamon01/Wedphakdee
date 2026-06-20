@@ -44,42 +44,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< Updated upstream
     <title>Backoffice Login</title>
-=======
-    <title>backoffice</title>
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, rgb(114, 241, 158), #ffffff, #17c46eff);
-            margin: 0;
-            min-height: 100vh;
-        }
->>>>>>> Stashed changes
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="stylelogin.css">
+    <link rel="stylesheet" href="assets/css/stylelogin.css">
 </head>
 
 <body>
-<<<<<<< Updated upstream
 
     <div class="bg-wrapper">
         <div class="grid">
-            <img src="images/bg1.jpg">
-            <img src="images/bg2.jpg">
-            <img src="images/bg3.jpg">
-            <img src="images/bg4.jpg">
+            <img src="assets/images/bg1.jpg">
+            <img src="assets/images/bg2.jpg">
+            <img src="assets/images/bg3.jpg">
+            <img src="assets/mages/bg4.jpg">
         </div>
 
         <div class="overlay"></div>
 
         <div class="login-box">
 
-            <img src="images/logo.png" class="logo">
+            <img src="assets/images/logo.png" class="logo">
 
             <h1  style="font-size:39px;">โรงพยาบาลภักดีชุมพล</h1>
 
@@ -88,12 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <span></span>
                 Backoffice Phakdee
                 <span></span>
-=======
-    <div class="container">
-        <div class="box">
-            <div class="logo-box">
-                <img src="assets/images/1.png" alt="logo">
->>>>>>> Stashed changes
             </div>
 
             <p>ระบบบริหารจัดการภายในองค์กร</p>
@@ -185,26 +163,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
 
-<<<<<<< Updated upstream
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script>
             <?php if (!empty($message)) { ?>
                 var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
                 errorModal.show();
             <?php } ?>
+        </script>
 </div >
 
 </body >
 </html >
-=======
-    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script>
-        <?php if (!empty($message)) { ?>
-            var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-            errorModal.show();
-        <?php } ?>
-    </script>
-</body>
-
-</html>
->>>>>>> Stashed changes
