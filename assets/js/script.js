@@ -2,6 +2,8 @@
 const pwd = document.getElementById('pwd');
 const eye = document.getElementById('toggleEye');
 
-eye.addEventListener('click', () => {
-  pwd.type = pwd.type === 'password' ? 'text' : 'password';
-});
+if (pwd && eye) {
+  eye.addEventListener('click', () => {
+    pwd.type = pwd.type === 'password' ? 'text' : 'password';
+  });
+}

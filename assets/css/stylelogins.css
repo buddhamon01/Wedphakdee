@@ -307,6 +307,32 @@ body{
 .field input::placeholder{color:#7d9788;}
 .field .icon{color:var(--green-600); flex:0 0 auto; display:flex;}
 .field .eye{cursor:pointer; color:#9db8a9; flex:0 0 auto; display:flex;}
+.field.has-error{
+  margin-bottom:8px;
+  background:rgba(255,245,245,0.92);
+  box-shadow:
+    inset 0 0 0 1px rgba(220,53,69,0.5),
+    inset 0 2px 5px rgba(220,53,69,0.08),
+    0 0 0 3px rgba(220,53,69,0.1);
+}
+.field.has-error .icon,
+.field.has-error .eye{
+  color:#dc3545;
+}
+.field-error,
+.error{
+  margin:-2px 0 14px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(220,53,69,0.1);
+  color:#b02a37;
+  font-size:13px;
+  font-weight:600;
+  text-align:left;
+}
+.error{
+  margin:0 0 14px;
+}
 
 .btn-login{
   width:100%;
