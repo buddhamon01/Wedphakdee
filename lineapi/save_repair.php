@@ -60,9 +60,9 @@ try {
         $result = curl_exec($ch);
         curl_close($ch);
 
-        echo "<script>alert('ส่งแจ้งเตือนเข้ากลุ่มเรียบร้อย!'); window.location='../repair_form.php';</script>";
+        echo "<script>alert('ส่งแจ้งเตือนเข้ากลุ่มเรียบร้อย!'); window.location='../repair_form/computer/indexrepairlist.php';</script>";
     }
 } catch (PDOException $e) {
     echo "Database Error: " . $e->getMessage();
-}
+}       
 ?>

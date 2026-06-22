@@ -213,23 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <span>พัฒนาต่อเนื่อง</span>
       </div>
     </div>
-     <div class="modal fade" id="errorModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title">⚠️ ข้อผิดพลาด</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <?php echo htmlspecialchars($message); ?>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-  </div>
+ 
 <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script>
             <?php if (!empty($message)) { ?>

@@ -1,20 +1,4 @@
-<!-- Message Modal -->
-<div class="modal fade" id="messageModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="messageModalTitle">แจ้งเตือน</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="messageModalBody">
-                ข้อความแจ้งเตือน
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">ปิด</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <style>
     #logoutModal {
