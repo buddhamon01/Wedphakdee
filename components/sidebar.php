@@ -7,7 +7,7 @@ $menuItems = [
     "leave" => ["label" => "📅 วันลา", "href" => "leave.php"],
     "e_document" => ["label" => "📄 หนังสือราชการ", "href" => "e_document.php"],
     "vehicle" => ["label" => "🚗 ยานพาหนะ", "href" => "vehicle/index.php"],
-    "repair" => ["label" => "🔧 แจ้งซ่อม", "href" => "repair_form.php"],
+    "repair" => ["label" => "🔧 แจ้งซ่อม", "href" => "repair_form.php"],                                    
 ];
 ?>
 <!-- Sidebar Navigation -->
