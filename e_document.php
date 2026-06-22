@@ -975,17 +975,6 @@ $receivedDocuments = $stmtReceived->get_result();
             }
         }
     </script>
-
-        <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <?php require __DIR__ . "/components/dialog.php"; ?>
-    <script>
-        <?php if ($show_login_success) { ?>
-            showMessageDialog(
-                <?php echo json_encode("สวัสดี " . $_SESSION["fullname"] . "\nยินดีต้อนรับเข้าสู่ระบบแจ้งซ่อมและบริหารงาน", JSON_UNESCAPED_UNICODE); ?>,
-                <?php echo json_encode("✅ ยินดีต้อนรับ", JSON_UNESCAPED_UNICODE); ?>
-            );
-        <?php } ?>
-    </script>
 </body>
 
 </html>
