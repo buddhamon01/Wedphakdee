@@ -1,19 +1,19 @@
 <?php
 include("config.php");
+require_once __DIR__ . "/authentication/auth_timeout.php";
 
-if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
-    exit();
-}
+ $type = $_SESSION['user_id'];
+ $message = $_SESSION['role'];
+
+    echo "<script>
+            alert('" . $_SESSION['user_id'] . " - " . $_SESSION['role'] . " - " . $_SESSION['login_time'] . "');
+          </script>";
 
 // Check if just logged in
 $show_login_success = isset($_SESSION["login_success"]) ? $_SESSION["login_success"] : false;
 if ($show_login_success) {
     unset($_SESSION["login_success"]);
 }
-
-// ฟั่งชี่นแจ้งเตือนไลน์ 
-
 
 // บันทึกข้อมูลแจ้งซ่อม
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_repair"])) {
