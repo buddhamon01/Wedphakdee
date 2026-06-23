@@ -1,34 +1,73 @@
 <?php
-include("config.php");
+session_start();
+require_once 'config.php';
 
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST["username"]);
-    $password = trim($_POST["password"]);
+
+    $username = trim($_POST["username"] ?? "");
+    $password = trim($_POST["password"] ?? "");
 
     if (empty($username) || empty($password)) {
+
         $message = "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
+
     } else {
-        $stmt = $conn->prepare("SELECT id, fullname, username, password FROM users WHERE username = ?");
+
+        $stmt = $conn->prepare("
+            SELECT
+                id,
+                fullname,
+                username,
+                password,
+                role,
+                status
+            FROM users
+            WHERE username = ?
+            LIMIT 1
+        ");
+
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows == 1) {
+        if ($result->num_rows === 1) {
+
             $user = $result->fetch_assoc();
 
-            if (password_verify($password, $user["password"])) {
+            //ตรวจสอบสถานะบัญชี
+            if (isset($user["status"]) && $user["status"] !== "active") {
+                $message = "บัญชีนี้ถูกระงับการใช้งาน";
+            }
+
+            //ตรวจสอบรหัสผ่าน
+            elseif (password_verify($password, $user["password"])) {
+
+                // ป้องกัน Session Fixation
+                session_regenerate_id(true);
+
+                // SESSION หลัก
                 $_SESSION["user_id"] = $user["id"];
                 $_SESSION["fullname"] = $user["fullname"];
                 $_SESSION["username"] = $user["username"];
+                $_SESSION["role"] = $user["role"];
+
+                // ใช้ทำ timeout
+                $_SESSION["last_activity"] = time();
+
                 $_SESSION["login_success"] = true;
+
+                // log เวลา login
+                $_SESSION["login_time"] = date("Y-m-d H:i:s");
 
                 header("Location: dashboard.php");
                 exit();
+
             } else {
-                $message = "❌ รหัสผ่านไม่ถูกต้อง นะจ๊ะ++9998888";
+                $message = "❌ รหัสผ่านไม่ถูกต้อง";
             }
+
         } else {
             $message = "ไม่พบชื่อผู้ใช้นี้ในระบบ";
         }
@@ -36,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="th">
@@ -162,7 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <span class="icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a4 4 0 0 0-4 4v3H7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a4 4 0 0 0-4-4Zm-2 7V6a2 2 0 1 1 4 0v3Z"/></svg>
           </span>
-                    <input type="password" name="password" placeholder="รหัสผ่าน" required>
+                    <input type="password" id="pwd" name="password" placeholder="รหัสผ่าน" required>
           <span class="eye" id="toggleEye" title="แสดง/ซ่อนรหัสผ่าน">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
           </span>
@@ -217,8 +257,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script>
             <?php if (!empty($message)) { ?>
-                var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-                errorModal.show();
+                var errorModalElement = document.getElementById('errorModal');
+                if (errorModalElement && window.bootstrap) {
+                    var errorModal = new bootstrap.Modal(errorModalElement);
+                    errorModal.show();
+                }
             <?php } ?>
         </script>
   <script src="assets/js/script.js"></script>
