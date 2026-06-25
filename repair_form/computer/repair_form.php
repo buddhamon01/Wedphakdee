@@ -28,23 +28,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_repair"])) {
     $location = trim($_POST["location"] ?? "");
     $technician_id = intval($_POST["technician_id"] ?? 0);
     $details = trim($_POST["details"] ?? "");
-
+    $priority = trim($_POST["priority"] ?? "");
+   
     if (
         empty($sender_name) || empty($department) || empty($repair_system) ||
-        empty($location) || $technician_id <= 0 || empty($details)
+        empty($location) || $technician_id <= 0 || empty($details) || empty($priority)
     ) {
         $message = "⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง";
     } else {
         $stmt = $conn->prepare("
             INSERT INTO repair_jobs 
-            (user_id, sender_name, department, repair_system, location, technician_id, details, status) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'รอดำเนินการ')
+            (user_id, sender_name, department, repair_system, location, technician_id, details, priority) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?) 
         ");
 
         echo "<script>alert(" . json_encode($message) . ");</script>";
         if ($stmt) {
             $user_id = $_SESSION["user_id"];
-            $stmt->bind_param("isssssi", $user_id, $sender_name, $department, $repair_system, $location, $technician_id, $details);
+            $stmt->bind_param("isssssi", $user_id, $sender_name, $department, $repair_system, $location, $technician_id, $details, $priority);
 
             if ($stmt->execute()) {
                 $message = "✅ บันทึกการแจ้งซ่อมเรียบร้อยแล้ว";
@@ -332,6 +333,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_repair"])) {
                             <?php endforeach; ?>
                         </select>
                     </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">สถานะ:</label>
+                        <select name="priority" class="form-select" required>
+                            <option value="">-- สถานะ --</option>
+                            <option value="normal" <?= ($_POST['priority'] ?? '') === 'ปกติ' ? 'selected' : ''; ?>>ปกติ</option>
+                            <option value="urgent" <?= ($_POST['priority'] ?? '') === 'ด่วน' ? 'selected' : ''; ?>>ด่วน</option>
+                            <option value="emergency" <?= ($_POST['priority'] ?? '') === 'เร่งด่วน' ? 'selected' : ''; ?>>เร่งด่วน</option>
+                        </select>
+                    </div>
+                        </select>
+                    
 
                     <div class="mb-3">
                         <label class="form-label">รายละเอียดแจ้งซ่อม:</label>
@@ -348,7 +361,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_repair"])) {
     </div>
 
 
-    <script src="../../assets/bootstrap/js/bootstrap.bundle.min.js"></script>#003d99
+    <script src="../../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <?php require __DIR__ . "/../../components/dialog.php"; ?>
     <script>
         <?php if ($show_login_success) { ?>

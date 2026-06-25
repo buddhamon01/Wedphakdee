@@ -5,9 +5,7 @@ require_once __DIR__ . "/authentication/auth_timeout.php";
  $type = $_SESSION['user_id'];
  $message = $_SESSION['role'];
 
-    echo "<script>
-            alert('" . $_SESSION['user_id'] . " - " . $_SESSION['role'] . " - " . $_SESSION['login_time'] . "');
-          </script>";
+  
 
 // Check if just logged in
 $show_login_success = isset($_SESSION["login_success"]) ? $_SESSION["login_success"] : false;

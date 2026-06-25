@@ -230,6 +230,9 @@ $result = $conn->query($sql);
                     เพิ่มข้อมูลแจ้งซ่อม
                 </a>
 
+                <a href="savejob/receive_job_list.php" class="btn btn-primary">
+                    📋 รายละเอียดงานที่รับซ่อม
+                </a>
                 <table class="table table-bordered table-striped">
 
                     <thead>
@@ -269,7 +272,7 @@ $result = $conn->query($sql);
                                 </td>
 
                                 <td>
-                                    <?= $row['details'] ?>
+                                    <?= $row['repair_system'] ?>
                                 </td>
 
                                 <td>
@@ -281,11 +284,29 @@ $result = $conn->query($sql);
                                 </td>
 
                                 <td>
-                                    <?= $row['detail'] ?>
+                                    <?= $row['details'] ?>
                                 </td>
 
                                 <td>
-                                    <?= $row['status'] ?>
+                                    <?php
+                                    switch ($row['priority']) {
+
+                                        case 'normal':
+                                            echo '<span class="badge bg-success">ปกติ</span>';
+                                            break;
+
+                                        case 'urgent':
+                                            echo '<span class="badge bg-warning text-dark">ด่วน</span>';
+                                            break;
+
+                                        case 'emergency':
+                                            echo '<span class="badge bg-danger">ด่วนมาก</span>';
+                                            break;
+
+                                        default:
+                                            echo '<span class="badge bg-secondary">ไม่ระบุ</span>';
+                                    }
+                                    ?>
                                 </td>
 
                                 <td>
@@ -293,20 +314,22 @@ $result = $conn->query($sql);
                                     <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">
                                         แก้ไข
                                     </a>
-
                                     <a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm"
                                         onclick="return confirm('ยืนยันการลบ?')">
                                         ลบ
                                     </a>
+
+                                    <a href="receive_job.php?id=<?= $row['id'] ?>" class="btn btn-success btn-sm">
+                                        รับงาน
+                                    </a>
+
 
                                 </td>
 
                             </tr>
 
                         <?php endwhile; ?>
-
                     </tbody>
-
                 </table>
 
             </div>
