@@ -1,20 +1,17 @@
-
 <?php
 include("config.php");
+require_once __DIR__ . "/authentication/auth_timeout.php";
 
-if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
-    exit();
-}
+ $type = $_SESSION['user_id'];
+ $message = $_SESSION['role'];
+
+  
 
 // Check if just logged in
 $show_login_success = isset($_SESSION["login_success"]) ? $_SESSION["login_success"] : false;
 if ($show_login_success) {
     unset($_SESSION["login_success"]);
 }
-
-// ฟั่งชี่นแจ้งเตือนไลน์ 
-
 
 // บันทึกข้อมูลแจ้งซ่อม
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_repair"])) {
@@ -27,13 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_repair"])) {
     } else {
         $technician_id = $_POST["technician_id"];
 
-$stmt = $conn->prepare("
+        $stmt = $conn->prepare("
     INSERT INTO repairs 
     (user_id, topic, reporter_name, detail, technician_id) 
     VALUES (?, ?, ?, ?, ?)
 ");
 
-$stmt->bind_param("isssi", $user_id, $topic, $reporter_name, $detail, $technician_id);
+        $stmt->bind_param("isssi", $user_id, $topic, $reporter_name, $detail, $technician_id);
         $stmt->bind_param("isss", $user_id, $topic, $reporter_name, $detail);
 
         if ($stmt->execute()) {
@@ -105,11 +102,12 @@ $repairs = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <title>เมนูหลัก - ระบบแจ้งซ่อม</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
     <style>
         * {
             margin: 0;
@@ -135,7 +133,7 @@ $repairs = $stmt->get_result();
             font-size: 22px;
             font-weight: bold;
             z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .container {
@@ -148,7 +146,7 @@ $repairs = $stmt->get_result();
             width: 260px;
             background: linear-gradient(135deg, #003d99, #0051ff);
             padding: 20px 0;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             left: 0;
             top: 60px;
@@ -161,11 +159,11 @@ $repairs = $stmt->get_result();
         }
 
         .sidebar::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 3px;
         }
 
@@ -188,24 +186,24 @@ $repairs = $stmt->get_result();
         }
 
         .sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-left-color: #48cae4;
             padding-left: 25px;
         }
 
         .sidebar-menu a.active {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             border-left-color: #48cae4;
         }
 
         .menu-divider {
             height: 1px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             margin: 10px 0;
         }
 
         .sidebar-title {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
@@ -223,120 +221,13 @@ $repairs = $stmt->get_result();
             background: #fff;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 25px;
         }
 
         .card h2 {
             margin-bottom: 15px;
             color: #333;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            resize: vertical;
-            font-family: Tahoma, sans-serif;
-        }
-
-        input, button, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background: #4a67ff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #3349c9;
-        }
-
-        .msg-box {
-            background: #e8fff0;
-            color: #0f7a36;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .table-box {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: white;
-        }
-
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-            vertical-align: top;
-        }
-
-        table th {
-            background: #4a67ff;
-            color: white;
-        }
-
-        .status-form {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            min-width: 220px;
-        }
-
-        .status-form select {
-            margin: 0;
-            min-width: 150px;
-        }
-
-        .status-form button {
-            margin: 0;
-            width: auto;
-            white-space: nowrap;
-            padding: 10px 14px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 13px;
-            color: white;
-        }
-
-        .pending {
-            background: linear-gradient(135deg, #d8002bff, #48cae4);
-        }
-
-        .done {
-           background: linear-gradient(135deg, #00b4d8, #48cae4);
-        }
-
-        .cancel {
-            background: #dc3545;
-        }
-
-        .welcome-text {
-            margin-bottom: 10px;
-            color: #666;
         }
 
         .user-info {
@@ -393,27 +284,18 @@ $repairs = $stmt->get_result();
         }
     </style>
 </head>
+
 <body>
     <div class="top-bar">
         🏢 ระบบแจ้งซ่อมและบริหารงาน
     </div>
 
     <div class="container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <ul class="sidebar-menu">
-                <li class="sidebar-title">📋 เมนูหลัก</li>
-                <li><a href="dashboard.php">🏠 หน้าแรก</a></li>
-                <li><a href="leave.php">📅 วันลา</a></li>
-                <li><a href="e_document.php">📄 หนังสือราชการ</a></li>
-                <li><a href="vehicle/index.php">🚗 ยานพาหนะ</a></li>
-                <li><a href="repair_form.php">🔧 แจ้งซ่อม</a></li>
-
-                <li class="menu-divider"></li>
-                <li class="sidebar-title">⚙️ ตั้งค่า</li>
-                <li><a href="logout.php">🚪 ออกจากระบบ</a></li>
-            </ul>
-        </aside>
+        <?php
+        $activePage = "dashboard";
+        $basePath = "";
+        require __DIR__ . "/components/sidebar.php";
+        ?>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -427,31 +309,16 @@ $repairs = $stmt->get_result();
         </main>
     </div>
 
-    <!-- Modal for Login Success -->
-    <div class="modal fade" id="loginSuccessModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title">✅ ยินดีต้อนรับ</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>สวัสดี <strong><?php echo htmlspecialchars($_SESSION["fullname"]); ?></strong></p>
-                    <p>ยินดีต้อนรับเข้าสู่ระบบแจ้งซ่อมและบริหารงาน</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">เข้าใช้งาน</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <?php require __DIR__ . "/components/dialog.php"; ?>
     <script>
         <?php if ($show_login_success) { ?>
-            var loginModal = new bootstrap.Modal(document.getElementById('loginSuccessModal'));
-            loginModal.show();
+            showMessageDialog(
+                <?php echo json_encode("สวัสดี " . $_SESSION["fullname"] . "\nยินดีต้อนรับเข้าสู่ระบบแจ้งซ่อมและบริหารงาน", JSON_UNESCAPED_UNICODE); ?>,
+                <?php echo json_encode("✅ ยินดีต้อนรับ", JSON_UNESCAPED_UNICODE); ?>
+            );
         <?php } ?>
     </script>
 </body>
+
 </html>

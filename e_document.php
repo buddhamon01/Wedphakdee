@@ -254,7 +254,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_document"])) {
             $original_name = $_FILES["document_file"]["name"];
             $tmp_name = $_FILES["document_file"]["tmp_name"];
             $ext = pathinfo($original_name, PATHINFO_EXTENSION);
-            $new_name = time() . "_" . rand(1000,9999) . "." . $ext;
+            $new_name = time() . "_" . rand(1000, 9999) . "." . $ext;
             $target_file = $upload_dir . $new_name;
             $mime_type = $_FILES["document_file"]["type"];
 
@@ -262,9 +262,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_document"])) {
                 $stmt = $conn->prepare("INSERT INTO documents (user_id, doc_no, short_title, description, file_name, file_path, file_type, sender_name, sender_department, send_type, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->bind_param(
                     "issssssssss",
-                    $user_id, $doc_no, $short_title, $description,
-                    $original_name, $target_file, $mime_type,
-                    $sender_name, $sender_department, $send_type, $status
+                    $user_id,
+                    $doc_no,
+                    $short_title,
+                    $description,
+                    $original_name,
+                    $target_file,
+                    $mime_type,
+                    $sender_name,
+                    $sender_department,
+                    $send_type,
+                    $status
                 );
 
                 if ($stmt->execute()) {
@@ -273,7 +281,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_document"])) {
 
                     $email_success = true;
 
-                    
+
                     if ($send_type == "department") {
                         $stmtDeptUsers = $conn->prepare("SELECT id, fullname, email, department FROM users WHERE department = ?");
                         $stmtDeptUsers->bind_param("s", $receiver_department);
@@ -301,7 +309,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["save_document"])) {
                             }
                         }
                         $stmtDeptUsers->close();
-
                     } elseif ($send_type == "person") {
                         $stmtOne = $conn->prepare("SELECT id, fullname, email, department FROM users WHERE id = ?");
                         $stmtOne->bind_param("i", $receiver_user_id);
@@ -410,11 +417,12 @@ $receivedDocuments = $stmtReceived->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <title><?php echo $t["title"]; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <style>
         * {
             margin: 0;
@@ -440,7 +448,7 @@ $receivedDocuments = $stmtReceived->get_result();
             font-size: 22px;
             font-weight: bold;
             z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .container-wrapper {
@@ -453,7 +461,7 @@ $receivedDocuments = $stmtReceived->get_result();
             width: 260px;
             background: linear-gradient(135deg, #003d99, #0051ff);
             padding: 20px 0;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             left: 0;
             top: 60px;
@@ -466,11 +474,11 @@ $receivedDocuments = $stmtReceived->get_result();
         }
 
         .sidebar::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 3px;
         }
 
@@ -493,24 +501,24 @@ $receivedDocuments = $stmtReceived->get_result();
         }
 
         .sidebar-menu a:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-left-color: #48cae4;
             padding-left: 25px;
         }
 
         .sidebar-menu a.active {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             border-left-color: #48cae4;
         }
 
         .menu-divider {
             height: 1px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             margin: 10px 0;
         }
 
         .sidebar-title {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
@@ -532,11 +540,14 @@ $receivedDocuments = $stmtReceived->get_result();
             background: #fff;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 25px;
         }
 
-        .btn-back, .lang-btn, .download-btn, .ack-btn {
+        .btn-back,
+        .lang-btn,
+        .download-btn,
+        .ack-btn {
             display: inline-block;
             padding: 10px 16px;
             color: white;
@@ -546,11 +557,27 @@ $receivedDocuments = $stmtReceived->get_result();
             cursor: pointer;
             margin: 5px 5px 5px 0;
         }
-        .btn-back { background: #4a67ff; }
-        .lang-btn { background: #6f42c1; }
-        .download-btn { background: #198754; }
-        .ack-btn { background: #fd7e14; }
-        input, select, textarea, button {
+
+        .btn-back {
+            background: #4a67ff;
+        }
+
+        .lang-btn {
+            background: #6f42c1;
+        }
+
+        .download-btn {
+            background: #198754;
+        }
+
+        .ack-btn {
+            background: #fd7e14;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
@@ -559,25 +586,33 @@ $receivedDocuments = $stmtReceived->get_result();
             box-sizing: border-box;
             font-family: Tahoma, sans-serif;
         }
+
         textarea {
             min-height: 120px;
             resize: vertical;
         }
+
         button {
             background: #6f42c1;
             color: white;
             border: none;
             cursor: pointer;
         }
-        button:hover { opacity: .92; }
+
+        button:hover {
+            opacity: .92;
+        }
+
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
+
         .success {
             background: #198754;
         }
+
         .message-success {
             background: #d4edda;
             color: #155724;
@@ -586,6 +621,7 @@ $receivedDocuments = $stmtReceived->get_result();
             margin-bottom: 15px;
             border: 1px solid #c3e6cb;
         }
+
         .message-error {
             background: #f8d7da;
             color: #721c24;
@@ -594,39 +630,50 @@ $receivedDocuments = $stmtReceived->get_result();
             margin-bottom: 15px;
             border: 1px solid #f5c6cb;
         }
-        .table-box { overflow-x: auto; }
+
+        .table-box {
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
             background: white;
         }
-        table th, table td {
+
+        table th,
+        table td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
             vertical-align: top;
         }
+
         table th {
             background: #6f42c1;
             color: white;
         }
+
         .status-form {
             display: flex;
             gap: 8px;
             align-items: center;
             min-width: 220px;
         }
+
         .status-form select {
             margin: 0;
             min-width: 140px;
         }
+
         .status-form button {
             margin: 0;
             width: auto;
             padding: 10px 14px;
             white-space: nowrap;
         }
+
         .badge {
             display: inline-block;
             padding: 6px 10px;
@@ -634,9 +681,18 @@ $receivedDocuments = $stmtReceived->get_result();
             font-size: 13px;
             color: white;
         }
-        .pending { background: #f0ad4e; }
-        .editing { background: #0d6efd; }
-        .cancel { background: #dc3545; }
+
+        .pending {
+            background: #f0ad4e;
+        }
+
+        .editing {
+            background: #0d6efd;
+        }
+
+        .cancel {
+            background: #dc3545;
+        }
 
         @media (max-width: 768px) {
             .sidebar {
@@ -647,12 +703,18 @@ $receivedDocuments = $stmtReceived->get_result();
                 margin-left: 200px;
             }
 
-            .grid-2 { grid-template-columns: 1fr; }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
             .status-form {
                 flex-direction: column;
                 align-items: stretch;
             }
-            .status-form button { width: 100%; }
+
+            .status-form button {
+                width: 100%;
+            }
         }
 
         @media (max-width: 600px) {
@@ -672,256 +734,257 @@ $receivedDocuments = $stmtReceived->get_result();
         }
     </style>
 </head>
+
 <body>
 
-<div class="top-bar">🏢 ระบบแจ้งซ่อมและบริหารงาน</div>
+    <div class="top-bar">🏢 ระบบแจ้งซ่อมและบริหารงาน</div>
 
-<div class="container-wrapper">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-        <ul class="sidebar-menu">
-            <li class="sidebar-title">📋 เมนูหลัก</li>
-            <li><a href="dashboard.php">🏠 หน้าแรก</a></li>
-            <li><a href="leave.php">📅 วันลา</a></li>
-            <li><a href="e_document.php" class="active">📄 หนังสือราชการ</a></li>
-            <li><a href="vehicle/index.php">🚗 ยานพาหนะ</a></li>
-            <li><a href="repair_form.php">🔧 แจ้งซ่อม</a></li>
+    <div class="container-wrapper">
+        <?php
+        $activePage = "e_document";
+        $basePath = "";
+        require __DIR__ . "/components/sidebar.php";
+        ?>
 
-            <li class="menu-divider"></li>
-            <li class="sidebar-title">⚙️ ตั้งค่า</li>
-            <li><a href="logout.php">🚪 ออกจากระบบ</a></li>
-        </ul>
-    </aside>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-wrapper">
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="page-wrapper">
+                <a href="dashboard.php" class="btn-back"><?php echo $t["back"]; ?></a>
+                <a href="e_document.php?lang=th" class="lang-btn">ไทย</a>
+                <a href="e_document.php?lang=en" class="lang-btn">English</a>
+                <a href="e_document.php?lang=cn" class="lang-btn">中文</a>
 
-            <a href="dashboard.php" class="btn-back"><?php echo $t["back"]; ?></a>
-            <a href="e_document.php?lang=th" class="lang-btn">ไทย</a>
-            <a href="e_document.php?lang=en" class="lang-btn">English</a>
-            <a href="e_document.php?lang=cn" class="lang-btn">中文</a>
+                <div class="card">
+                    <h2><?php echo $t["form_title"]; ?></h2>
 
-            <div class="card">
-                <h2><?php echo $t["form_title"]; ?></h2>
-
-                <?php if (!empty($message)) { ?>
-                    <div class="<?php echo $message_type == 'success' ? 'message-success' : 'message-error'; ?>">
-                        <?php echo htmlspecialchars($message); ?>
-                    </div>
-                <?php } ?>
-
-                <form method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="save_document" value="1">
-
-            <div class="grid-2">
-                <div>
-                    <label><?php echo $t["doc_no"]; ?></label>
-                    <input type="text" name="doc_no" required>
-                </div>
-                <div>
-                    <label><?php echo $t["short_title"]; ?></label>
-                    <input type="text" name="short_title" required>
-                </div>
-            </div>
-
-            <label><?php echo $t["description"]; ?></label>
-            <textarea name="description" required></textarea>
-
-            <div class="grid-2">
-                <div>
-                    <label><?php echo $t["sender_name"]; ?></label>
-                    <input type="text" name="sender_name" value="<?php echo htmlspecialchars($current_fullname); ?>" required>
-                </div>
-                <div>
-                    <label><?php echo $t["sender_department"]; ?></label>
-                    <input type="text" name="sender_department" value="<?php echo htmlspecialchars($current_department); ?>" required>
-                </div>
-            </div>
-
-            <div class="grid-2">
-                <div>
-                    <label><?php echo $t["send_type"]; ?></label>
-                    <select name="send_type" id="send_type" onchange="toggleReceiver()" required>
-                        <option value="department"><?php echo $t["send_department"]; ?></option>
-                        <option value="person"><?php echo $t["send_person"]; ?></of[ption>
-                    </select>
-                </div>
-                <div>
-                    <label><?php echo $t["status"]; ?></label>
-                    <select name="status" required>
-                        <option value="รอดำเนินการ">รอดำเนินการ</option>
-                        <option value="แก้ไข">แก้ไข</option>
-                        <option value="ยกเลิก">ยกเลิก</option>
-                    </select>
-                </div>
-            </div>
-
-           <div id="department_box">
-    <label><?php echo $t["receiver_department"]; ?></label>
-    <select name="receiver_department" required>
-        <option value="">-- เลือกแผนก --</option>
-        <?php foreach ($departments as $dept) { ?>
-            <option value="<?php echo htmlspecialchars($dept["department_name"]); ?>">
-                <?php echo htmlspecialchars($dept["department_name"]); ?>
-            </option>
-        <?php } ?>
-    </select>
-</div>
-
-
-           <div id="person_box" style="display:none;">
-    <label><?php echo $t["receiver_person"]; ?></label>
-    <select name="receiver_user_id">
-        <option value="">-- เลือกผู้รับ --</option>
-        <?php foreach ($users as $u) { ?>
-            <?php if ($u["id"] != $user_id) { ?>
-                <option value="<?php echo $u["id"]; ?>">
-                    <?php echo htmlspecialchars($u["fullname"] . " (" . ($u["department_name"] ?? "-") . ")"); ?>
-                </option>
-            <?php } ?>
-        <?php } ?>
-    </select>
-</div>
-            <label><?php echo $t["file_upload"]; ?></label>
-            <input type="file" name="document_file" required>
-
-            <button type="submit"><?php echo $t["save"]; ?></button>
-        </form>
-    </div>
-
-    <div class="card">
-        <h2><?php echo $t["list_title"]; ?></h2>
-
-        <div class="table-box">
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>เลขหนังสือ</th>
-                    <th>หัวข้อย่อ</th>
-                    <th>ไฟล์</th>
-                    <th>สถานะปัจจุบัน</th>
-                    <th>แก้ไขสถานะ</th>
-                    <th>วันที่สร้าง</th>
-                </tr>
-
-                <?php if ($myDocuments && $myDocuments->num_rows > 0) { ?>
-                    <?php while($row = $myDocuments->fetch_assoc()) { ?>
-                        <tr>
-                            <td><?php echo $row["id"]; ?></td>
-                            <td><?php echo htmlspecialchars($row["doc_no"]); ?></td>
-                            <td><?php echo htmlspecialchars($row["short_title"]); ?></td>
-                            <td>
-                                <a class="download-btn" href="e_document.php?download_id=<?php echo $row["id"]; ?>&lang=<?php echo $lang; ?>">
-                                    <?php echo $t["download"]; ?>
-                                </a>
-                            </td>
-                            <td>
-                                <?php
-                                    $status_class = "pending";
-                                  if ($row["status"] == "ส่งสำเร็จ") $status_class = "success";
-if ($row["status"] == "แก้ไข") $status_class = "editing";
-if ($row["status"] == "ยกเลิก") $status_class = "cancel";
-                                ?>
-                                <span class="badge <?php echo $status_class; ?>">
-                                    <?php echo htmlspecialchars($row["status"]); ?>
-                                </span>
-                            </td>
-                            <td>
-                                <form method="POST" class="status-form">
-                                    <input type="hidden" name="update_doc_status" value="1">
-                                    <input type="hidden" name="document_id" value="<?php echo $row["id"]; ?>">
-                                    <select name="status" required>
-                                       <option value="รอดำเนินการ" <?php if ($row["status"] == "รอดำเนินการ") echo "selected"; ?>>รอดำเนินการ</option>
-<option value="ส่งสำเร็จ" <?php if ($row["status"] == "ส่งสำเร็จ") echo "selected"; ?>>ส่งสำเร็จ</option>
-<option value="แก้ไข" <?php if ($row["status"] == "แก้ไข") echo "selected"; ?>>แก้ไข</option>
-<option value="ยกเลิก" <?php if ($row["status"] == "ยกเลิก") echo "selected"; ?>>ยกเลิก</option>
-                                    </select>
-                                    <button type="submit">บันทึก</button>
-                                </form>
-                            </td>
-                            <td><?php echo htmlspecialchars($row["created_at"]); ?></td>
-                        </tr>
+                    <?php if (!empty($message)) { ?>
+                        <div class="<?php echo $message_type == 'success' ? 'message-success' : 'message-error'; ?>">
+                            <?php echo htmlspecialchars($message); ?>
+                        </div>
                     <?php } ?>
-                <?php } else { ?>
-                    <tr>
-                        <td colspan="7" style="text-align:center;">ยังไม่มีข้อมูลเอกสาร</td>
-                    </tr>
-                <?php } ?>
-            </table>
-        </div>
-    </div>
 
-    <div class="card">
-        <h2><?php echo $t["history_title"]; ?></h2>
+                    <form method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="save_document" value="1">
 
-        <div class="table-box">
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>เลขหนังสือ</th>
-                    <th>หัวข้อย่อ</th>
-                    <th>ไฟล์</th>
-                    <th>ลงรับ</th>
-                    <th>วันเวลา</th>
-                </tr>
+                        <div class="grid-2">
+                            <div>
+                                <label><?php echo $t["doc_no"]; ?></label>
+                                <input type="text" name="doc_no" required>
+                            </div>
+                            <div>
+                                <label><?php echo $t["short_title"]; ?></label>
+                                <input type="text" name="short_title" required>
+                            </div>
+                        </div>
 
-                <?php if ($receivedDocuments && $receivedDocuments->num_rows > 0) { ?>
-                    <?php while($row = $receivedDocuments->fetch_assoc()) { ?>
-                        <tr>
-                            <td><?php echo $row["document_id"]; ?></td>
-                            <td><?php echo htmlspecialchars($row["doc_no"]); ?></td>
-                            <td><?php echo htmlspecialchars($row["short_title"]); ?></td>
-                            <td>
-                                <a class="download-btn" href="e_document.php?download_id=<?php echo $row["document_id"]; ?>&lang=<?php echo $lang; ?>">
-                                    <?php echo $t["download"]; ?>
-                                </a>
-                            </td>
-                            <td>
-                                <?php if ($row["is_acknowledged"] == 1) { ?>
-                                    ลงรับแล้ว
-                                <?php } else { ?>
-                                    <form method="POST">
-                                        <input type="hidden" name="ack_document" value="1">
-                                        <input type="hidden" name="receiver_id" value="<?php echo $row["id"]; ?>">
-                                        <input type="hidden" name="document_id" value="<?php echo $row["document_id"]; ?>">
-                                        <button type="submit" class="ack-btn"><?php echo $t["ack"]; ?></button>
-                                    </form>
+                        <label><?php echo $t["description"]; ?></label>
+                        <textarea name="description" required></textarea>
+
+                        <div class="grid-2">
+                            <div>
+                                <label><?php echo $t["sender_name"]; ?></label>
+                                <input type="text" name="sender_name" value="<?php echo htmlspecialchars($current_fullname); ?>" required>
+                            </div>
+                            <div>
+                                <label><?php echo $t["sender_department"]; ?></label>
+                                <input type="text" name="sender_department" value="<?php echo htmlspecialchars($current_department); ?>" required>
+                            </div>
+                        </div>
+
+                        <div class="grid-2">
+                            <div>
+                                <label><?php echo $t["send_type"]; ?></label>
+                                <select name="send_type" id="send_type" onchange="toggleReceiver()" required>
+                                    <option value="department"><?php echo $t["send_department"]; ?></option>
+                                    <option value="person"><?php echo $t["send_person"]; ?></of[ption>
+                                </select>
+                            </div>
+                            <div>
+                                <label><?php echo $t["status"]; ?></label>
+                                <select name="status" required>
+                                    <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                    <option value="แก้ไข">แก้ไข</option>
+                                    <option value="ยกเลิก">ยกเลิก</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="department_box">
+                            <label><?php echo $t["receiver_department"]; ?></label>
+                            <select name="receiver_department" required>
+                                <option value="">-- เลือกแผนก --</option>
+                                <?php foreach ($departments as $dept) { ?>
+                                    <option value="<?php echo htmlspecialchars($dept["department_name"]); ?>">
+                                        <?php echo htmlspecialchars($dept["department_name"]); ?>
+                                    </option>
                                 <?php } ?>
-                            </td>
-                            <td>
-                                <?php echo !empty($row["received_at"]) ? htmlspecialchars($row["received_at"]) : "-"; ?>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                <?php } else { ?>
-                    <tr>
-                        <td colspan="6" style="text-align:center;">ยังไม่มีเอกสารที่ได้รับ</td>
-                    </tr>
-                <?php } ?>
-            </table>
-        </div>
-            </div>
+                            </select>
+                        </div>
 
-        </div>
+
+                        <div id="person_box" style="display:none;">
+                            <label><?php echo $t["receiver_person"]; ?></label>
+                            <select name="receiver_user_id">
+                                <option value="">-- เลือกผู้รับ --</option>
+                                <?php foreach ($users as $u) { ?>
+                                    <?php if ($u["id"] != $user_id) { ?>
+                                        <option value="<?php echo $u["id"]; ?>">
+                                            <?php echo htmlspecialchars($u["fullname"] . " (" . ($u["department_name"] ?? "-") . ")"); ?>
+                                        </option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <label><?php echo $t["file_upload"]; ?></label>
+                        <input type="file" name="document_file" required>
+
+                        <button type="submit"><?php echo $t["save"]; ?></button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2><?php echo $t["list_title"]; ?></h2>
+
+                    <div class="table-box">
+                        <table>
+                            <tr>
+                                <th>ID</th>
+                                <th>เลขหนังสือ</th>
+                                <th>หัวข้อย่อ</th>
+                                <th>ไฟล์</th>
+                                <th>สถานะปัจจุบัน</th>
+                                <th>แก้ไขสถานะ</th>
+                                <th>วันที่สร้าง</th>
+                            </tr>
+
+                            <?php if ($myDocuments && $myDocuments->num_rows > 0) { ?>
+                                <?php while ($row = $myDocuments->fetch_assoc()) { ?>
+                                    <tr>
+                                        <td><?php echo $row["id"]; ?></td>
+                                        <td><?php echo htmlspecialchars($row["doc_no"]); ?></td>
+                                        <td><?php echo htmlspecialchars($row["short_title"]); ?></td>
+                                        <td>
+                                            <a class="download-btn" href="e_document.php?download_id=<?php echo $row["id"]; ?>&lang=<?php echo $lang; ?>">
+                                                <?php echo $t["download"]; ?>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            $status_class = "pending";
+                                            if ($row["status"] == "ส่งสำเร็จ") $status_class = "success";
+                                            if ($row["status"] == "แก้ไข") $status_class = "editing";
+                                            if ($row["status"] == "ยกเลิก") $status_class = "cancel";
+                                            ?>
+                                            <span class="badge <?php echo $status_class; ?>">
+                                                <?php echo htmlspecialchars($row["status"]); ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <form method="POST" class="status-form">
+                                                <input type="hidden" name="update_doc_status" value="1">
+                                                <input type="hidden" name="document_id" value="<?php echo $row["id"]; ?>">
+                                                <select name="status" required>
+                                                    <option value="รอดำเนินการ" <?php if ($row["status"] == "รอดำเนินการ") echo "selected"; ?>>รอดำเนินการ</option>
+                                                    <option value="ส่งสำเร็จ" <?php if ($row["status"] == "ส่งสำเร็จ") echo "selected"; ?>>ส่งสำเร็จ</option>
+                                                    <option value="แก้ไข" <?php if ($row["status"] == "แก้ไข") echo "selected"; ?>>แก้ไข</option>
+                                                    <option value="ยกเลิก" <?php if ($row["status"] == "ยกเลิก") echo "selected"; ?>>ยกเลิก</option>
+                                                </select>
+                                                <button type="submit">บันทึก</button>
+                                            </form>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($row["created_at"]); ?></td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td colspan="7" style="text-align:center;">ยังไม่มีข้อมูลเอกสาร</td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><?php echo $t["history_title"]; ?></h2>
+
+                    <div class="table-box">
+                        <table>
+                            <tr>
+                                <th>ID</th>
+                                <th>เลขหนังสือ</th>
+                                <th>หัวข้อย่อ</th>
+                                <th>ไฟล์</th>
+                                <th>ลงรับ</th>
+                                <th>วันเวลา</th>
+                            </tr>
+
+                            <?php if ($receivedDocuments && $receivedDocuments->num_rows > 0) { ?>
+                                <?php while ($row = $receivedDocuments->fetch_assoc()) { ?>
+                                    <tr>
+                                        <td><?php echo $row["document_id"]; ?></td>
+                                        <td><?php echo htmlspecialchars($row["doc_no"]); ?></td>
+                                        <td><?php echo htmlspecialchars($row["short_title"]); ?></td>
+                                        <td>
+                                            <a class="download-btn" href="e_document.php?download_id=<?php echo $row["document_id"]; ?>&lang=<?php echo $lang; ?>">
+                                                <?php echo $t["download"]; ?>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <?php if ($row["is_acknowledged"] == 1) { ?>
+                                                ลงรับแล้ว
+                                            <?php } else { ?>
+                                                <form method="POST">
+                                                    <input type="hidden" name="ack_document" value="1">
+                                                    <input type="hidden" name="receiver_id" value="<?php echo $row["id"]; ?>">
+                                                    <input type="hidden" name="document_id" value="<?php echo $row["document_id"]; ?>">
+                                                    <button type="submit" class="ack-btn"><?php echo $t["ack"]; ?></button>
+                                                </form>
+                                            <?php } ?>
+                                        </td>
+                                        <td>
+                                            <?php echo !empty($row["received_at"]) ? htmlspecialchars($row["received_at"]) : "-"; ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <tr>
+                                    <td colspan="6" style="text-align:center;">ยังไม่มีเอกสารที่ได้รับ</td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
         </main>
     </div>
 
-<script>
-function toggleReceiver() {
-    var sendType = document.getElementById("send_type").value;
-    var departmentBox = document.getElementById("department_box");
-    var personBox = document.getElementById("person_box");
+    <script>
+        function toggleReceiver() {
+            var sendType = document.getElementById("send_type").value;
+            var departmentBox = document.getElementById("department_box");
+            var personBox = document.getElementById("person_box");
 
-    if (sendType === "department") {
-        departmentBox.style.display = "block";
-        personBox.style.display = "none";
-    } else {
-        departmentBox.style.display = "none";
-        personBox.style.display = "block";
-    }
-}
-</script>
-
+            if (sendType === "department") {
+                departmentBox.style.display = "block";
+                personBox.style.display = "none";
+            } else {
+                departmentBox.style.display = "none";
+                personBox.style.display = "block";
+            }
+        }
+    </script>
+    <script src="../../assets/bootstrap/js/bootstrap.bundle.min.js"></script>#003d99
+    <?php require __DIR__ . "/../../components/dialog.php"; ?>
+    <script>
+        <?php if ($show_login_success) { ?>
+            showMessageDialog(
+                <?php echo json_encode("สวัสดี " . $_SESSION["fullname"] . "\nยินดีต้อนรับเข้าสู่ระบบแจ้งซ่อมและบริหารงาน", JSON_UNESCAPED_UNICODE); ?>,
+                <?php echo json_encode("✅ ยินดีต้อนรับ", JSON_UNESCAPED_UNICODE); ?>
+            );
+        <?php } ?>
+    </script>
 </body>
+
 </html>

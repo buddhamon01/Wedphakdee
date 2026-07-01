@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
 $user = "root";
-$pass = "12345678";
+$pass = "";
 $dbname = "login_db";
 
 $conn = new mysqli($host, $user, $pass, $dbname);
@@ -12,5 +12,6 @@ if ($conn->connect_error) {
 
 $conn->set_charset("utf8mb4");
 
-session_start();
-?>
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
