@@ -66,6 +66,7 @@ $result = $conn->query($sql);
         }
 
         .sidebar {
+
             width: 260px;
             background: linear-gradient(135deg, #003d99, #0051ff);
             padding: 20px 0;
@@ -92,6 +93,7 @@ $result = $conn->query($sql);
 
         .sidebar-menu {
             list-style: none;
+            padding: 0;
         }
 
         .sidebar-menu li {

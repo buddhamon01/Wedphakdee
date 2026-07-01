@@ -344,6 +344,10 @@
                         <i class="fa fa-3x fa-stethoscope text-danger"></i>
                         <span>ศูนย์เครื่องมือแพทย์</span>
                     </a>
+                    <a href="propertywork/index.php" class="menu-card">
+                        <i class="fa-solid fa-house "></i>
+                        <span>งานทรัพย์สิน</span>
+                    </a>
 
 
 
@@ -356,7 +360,7 @@
 
 
 
-<script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>#003d99
+    <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>#003d99
     <?php require __DIR__ . "/../components/dialog.php"; ?>
     <script>
         <?php if ($show_login_success) { ?>
