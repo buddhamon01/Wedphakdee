@@ -1,23 +1,23 @@
+<?php
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset='utf-8'>
-<title>ศูนย์เครื่องมือแพทย์</title>
-<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet'>
-</head>
-<body>
+$data = require_once '../../mock_data/mock_data.php';
 
-<div class='container mt-4'>
+include '../../components/header.php';
+include '../../components/navbar.php';
+?>
+<div class="container-fluid mt-3">
 
-<h2>ศูนย์เครื่องมือแพทย์</h2>
-<hr>
+    <?php include 'filter.php'; ?>
 
-<div class='alert alert-info'>
-อยู่ระหว่างพัฒนา
-</div>
+    <?php include 'card_summary.php'; ?>
+
+    <?php include 'dashboard.php'; ?>
+
+    <?php include 'chart.php'; ?>
 
 </div>
 
-</body>
-</html>
+<?php
+include '../../components/footer.php';
+include '../../components/scripts.php';
+?>
