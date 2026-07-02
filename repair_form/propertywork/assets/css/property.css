@@ -1,0 +1,193 @@
+/* ========================================
+   Property Management System
+   โรงพยาบาลภักดีชุมพล
+======================================== */
+
+body {
+    background: #eef2f7;
+    font-family: "Sarabun", sans-serif;
+}
+
+/* Header */
+
+.page-title {
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+    color: #0d6efd;
+
+}
+
+.page-subtitle {
+
+    color: #666;
+
+}
+
+/* Card */
+
+.summary-card {
+
+    border: none;
+
+    border-radius: 14px;
+
+    transition: .3s;
+
+    overflow: hidden;
+
+}
+
+.summary-card:hover {
+
+    transform: translateY(-4px);
+
+}
+
+.summary-card .card-body {
+
+    padding: 20px;
+
+}
+
+.summary-number {
+
+    font-size: 34px;
+
+    font-weight: bold;
+
+}
+
+.summary-title {
+
+    color: #666;
+
+}
+
+/* Table */
+
+.table {
+
+    background: white;
+
+}
+
+.table thead th {
+
+    background: #1565C0;
+
+    color: white;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    white-space: nowrap;
+
+}
+
+.table td {
+
+    vertical-align: middle;
+
+}
+
+/* Search */
+
+.search-box {
+
+    border-radius: 30px;
+
+    padding: 12px 18px;
+
+}
+
+/* Button */
+
+.btn {
+
+    border-radius: 8px;
+
+}
+
+.btn i {
+
+    margin-right: 5px;
+
+}
+
+/* Action */
+
+.action-btn {
+
+    width: 36px;
+
+}
+
+/* Badge */
+
+.badge-normal {
+
+    background: #198754;
+
+}
+
+.badge-repair {
+
+    background: #dc3545;
+
+}
+
+.badge-borrow {
+
+    background: #ffc107;
+
+    color: #000;
+
+}
+
+/* Card */
+
+.asset-card {
+
+    border: none;
+
+    border-radius: 12px;
+
+}
+
+/* Pagination */
+
+.pagination .page-link {
+
+    color: #1565C0;
+
+}
+
+.pagination .active .page-link {
+
+    background: #1565C0;
+
+    border-color: #1565C0;
+
+}
+
+/* Responsive */
+
+@media(max-width:768px) {
+
+    .page-title {
+
+        font-size: 22px;
+
+    }
+
+    .table {
+
+        font-size: 13px;
+
+    }
+
+}
